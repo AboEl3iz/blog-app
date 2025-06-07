@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Comment, CommentSchema } from './entities/comment.entity';
 
 @Module({
   controllers: [CommentController],
   providers: [CommentService],
+  imports: [
+    // Import MongooseModule and register the Comment schema
+    MongooseModule.forFeature([
+      { name: 'Comment', schema: CommentSchema },
+    ]),
+  ],
 })
 export class CommentModule {}
