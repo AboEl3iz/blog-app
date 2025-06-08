@@ -26,6 +26,15 @@ import { JwtModule } from '@nestjs/jwt';
         uri: configService.get<string>('DATABASE_URL'),
       }),
       inject: [ConfigService],
+    }),
+     JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+        global: true, // Makes the JWT module available globally
+      }),
+      inject: [ConfigService],
     })
 
   
