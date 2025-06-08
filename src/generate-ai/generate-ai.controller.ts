@@ -1,34 +1,28 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { GenerateAiService } from './generate-ai.service';
-import { CreateGenerateAiDto } from './dto/create-generate-ai.dto';
+import {  CreateGenerateAiReplyDto } from './dto/create-generate-ai.dto';
 import { UpdateGenerateAiDto } from './dto/update-generate-ai.dto';
+import { CreateGenerateAiIdeasDto } from './dto/create-generate-ai-ideas';
 
 @Controller('generate-ai')
 export class GenerateAiController {
   constructor(private readonly generateAiService: GenerateAiService) {}
 
-  @Post()
-  create(@Body() createGenerateAiDto: CreateGenerateAiDto) {
-    return this.generateAiService.create(createGenerateAiDto);
+  @Post("generate-reply")
+  AIgenerateReply(@Body() createGenerateAiDto: CreateGenerateAiReplyDto) {
+    return this.generateAiService.generateReply(createGenerateAiDto);
   }
 
-  @Get()
-  findAll() {
-    return this.generateAiService.findAll();
+  @Post("generate-post-ideas")
+  AIgeneratePostIdeas(@Body() createGenerateAiDto: CreateGenerateAiIdeasDto) {
+    return this.generateAiService.generatePostIdeas(createGenerateAiDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.generateAiService.findOne(+id);
+  @Post("generate-post")
+  AIgeneratePost(@Body() createGenerateAiDto: CreateGenerateAiIdeasDto) {
+    return this.generateAiService.generatePost(createGenerateAiDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenerateAiDto: UpdateGenerateAiDto) {
-    return this.generateAiService.update(+id, updateGenerateAiDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.generateAiService.remove(+id);
-  }
+  
+  
 }

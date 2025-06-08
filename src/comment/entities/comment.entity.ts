@@ -15,5 +15,8 @@ export class Comment {
     createdAt:Date;
     @Prop({ type: Date, default: Date.now })
     updatedAt:Date
+    @Prop({ type: [Object], default: [] }) // Optional, or just define in TypeScript
+    replies?: Comment[];
+
 }
 export const CommentSchema = SchemaFactory.createForClass(Comment);

@@ -11,6 +11,7 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   controllers: [PostController],
   providers: [PostService],
+  exports: [MongooseModule], // Export PostService to be used in other modules
   imports: [
     AuthModule,
     MongooseModule.forFeature([

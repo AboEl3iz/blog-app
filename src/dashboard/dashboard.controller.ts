@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
-import { CreateDashboardDto } from './dto/create-dashboard.dto';
-import { UpdateDashboardDto } from './dto/update-dashboard.dto';
+
+import { AuthorizationGuard } from 'src/guards/authorization/authorization.guard';
+import { AuthenticationGuard } from 'src/guards/authentication/authentication.guard';
+import { Roles } from 'src/decorator/roles/roles.decorator';
+import { Role } from 'src/decorator/enum/role.enum';
 
 @Controller('dashboard')
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
-
-  @Post()
-  create(@Body() createDashboardDto: CreateDashboardDto) {
-    return this.dashboardService.create(createDashboardDto);
+  @Roles(Role.Admin)
+  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  @Get('dashboard-summary')
+  DashboardSummary() {
+    return this.dashboardService.dashboard();
   }
 
-  @Get()
-  findAll() {
-    return this.dashboardService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dashboardService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDashboardDto: UpdateDashboardDto) {
-    return this.dashboardService.update(+id, updateDashboardDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dashboardService.remove(+id);
-  }
+  
 }

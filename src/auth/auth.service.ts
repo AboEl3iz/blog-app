@@ -57,7 +57,7 @@ export class AuthService {
 
   async refreshToken(refreshDTo: RefreshTokenDTO) {
     const { refreshtoken } = refreshDTo;
-    const existingToken = await this.refrechrepository.findOneAndDelete({  refreshtoken: refreshtoken  });
+    const existingToken = await this.refrechrepository.findOne({  refreshtoken: refreshtoken  });
 
     if (!existingToken) {
       throw new BadRequestException('No refresh token found for this user');
@@ -67,7 +67,7 @@ export class AuthService {
     if (existingToken.expirationDate < new Date()) {
       throw new BadRequestException('Refresh token has expired');
     }
-
+    await this.refrechrepository.deleteOne({ refreshtoken: refreshtoken }); // Delete the old refresh token
     const user = await this.authrepository.findOne( { _id: existingToken.userId } ); // Delete the old refresh token
     const newTokens = this.generateJwtToken({
       userId: existingToken.userId,
