@@ -15,7 +15,7 @@ export class Auth {
     createdAt: Date;
     @Prop({type: Date, default: Date.now})
     updatedAt: Date;
-    @Prop({required: true})
+    @Prop({type: String, default: null})
     bio: string;
     @Prop({type: String, default: null})
     profilePicture: string;

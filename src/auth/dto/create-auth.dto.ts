@@ -1,1 +1,21 @@
-export class CreateAuthDto {}
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+
+export class CreateAuthDto {
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
+    @IsString()
+    @IsNotEmpty()
+    password: string;
+    @IsString()
+    @IsOptional()
+    role?: string;
+   
+    
+    @IsString()
+    @IsOptional()
+    roletoken?: string;
+}
