@@ -1,98 +1,193 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+📝 Blog App API
+This is a RESTful Blog API built using NestJS , designed for scalable, maintainable server-side applications. It supports authentication , post management , commenting , dashboard analytics , and even AI-assisted content generation via Gemini 1.5 Flash .
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Fully documented via Swagger (OpenAPI 3.0) and supports MongoDB with Mongoose. 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+🚀 Features
+🔐 Authentication : Signup, login, token refresh, and profile access
+📝 Post Management : Create, read, update, delete (CRUD), increment views/likes, search, filter by tag/slug
+💬 Comments : Add, retrieve, and delete comments on posts
+📊 Dashboard : View summarized data for admin or analytics
+🤖 AI-Generated Content : Generate blog ideas, posts, and replies using Gemini 1.5 Flash
+✅ DTO Validation : Type-safe and validated requests with class-validator
+📦 Docker Support : Easily containerized for deployment
+🔧 Swagger UI : Interactive API documentation at /api
+📂 Project Structure
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1
+2
+3
+4
+5
+6
+7
+src/
+├── auth/              # User auth, JWT, and roles
+├── post/              # Post entity and CRUD operations
+├── comment/           # Comment entity and routes
+├── dashboard/         # Admin summary endpoints
+├── generate-ai/       # AI content generation (Gemini 1.5 Flash)
+├── common/            # Shared modules, decorators, guards
+🛠️ Installation & Setup
+bash
 
-## Project setup
 
-```bash
-$ npm install
-```
+1
+2
+3
+4
+5
+6
+7
+8
+9
+# Clone the repo
+git clone https://github.com/your-username/blog-api.git   
+cd blog-api
 
-## Compile and run the project
+# Install dependencies
+npm install
 
-```bash
-# development
-$ npm run start
+# Create a .env file
+cp .env.example .env
+⚙️ Environment Variables (.env)
+ini
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+1
+2
+3
+4
+MONGO_URI=mongodb://localhost:27017/blog-db
+JWT_SECRET=your_jwt_secret
+PORT=3000
+GEMINI_API_KEY=your_google_gemini_api_key
+🧪 Run the App
+bash
 
-## Run tests
 
-```bash
-# unit tests
-$ npm run test
+1
+2
+3
+4
+5
+# Development mode
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
+# Run with Docker
+docker-compose up
+📘 API Documentation
+Visit the interactive Swagger UI at:
 
-# test coverage
-$ npm run test:cov
-```
+🔗 http://localhost:3000/api
 
-## Deployment
+🔐 Authentication Endpoints
+POST
+/auth/signup
+Register a new user
+POST
+/auth/login
+Login and get tokens
+POST
+/auth/refresh
+Refresh access token
+GET
+/auth/profile
+Get current user profile
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+📝 Post Management Endpoints
+POST
+/post/create
+Create a new post
+GET
+/post/posts
+Retrieve all posts
+PUT
+/post/{id}
+Update a post by ID
+DELETE
+/post/{id}
+Delete a post by ID
+POST
+/post/increment-views/{id}
+Increment views of a post
+POST
+/post/increment-likes/{id}
+Increment likes of a post
+GET
+/post/with-slug
+Get post by slug
+GET
+/post/with-tag
+Get posts by tag
+GET
+/post/search
+Search posts
+GET
+/post/top-posts
+Get top posts
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+💬 Comment Endpoints
+POST
+/comment/add/{postId}
+Add a comment to a post
+GET
+/comment/all
+Retrieve all comments
+GET
+/comment/{postId}
+Get comments for a specific post
+DELETE
+/comment/{id}
+Delete a comment by ID
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+📊 Dashboard Endpoints
+GET
+/dashboard/dashboard-summary
+Admin dashboard data
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+🤖 AI Content Generation Endpoints (Gemini 1.5 Flash)
+POST
+/generate-ai/generate-reply
+Generate AI reply to a comment
+POST
+/generate-ai/generate-post-ideas
+Generate blog post ideas
+POST
+/generate-ai/generate-post
+Generate a full blog post
 
-## Resources
+🧩 DTOs & Validation
+The app uses class-validator for strong input validation:
 
-Check out a few resources that may come in handy when working with NestJS:
+CreateAuthDto, LoginAuthDto, RefreshTokenDTO
+CreatePostDto, UpdatePostDto
+CreateCommentDto
+CreateGenerateAiReplyDto, CreateGenerateAiIdeasDto
+🖼️ Swagger UI Screenshots
+🔗 Full Swagger UI: http://localhost:3000/api
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+🐳 Docker
+bash
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+1
+2
+# Build and run with Docker
+docker-compose up --build
+📌 Tech Stack
+Framework
+NestJS
+Database
+MongoDB + Mongoose
+Authentication
+JWT (Access + Refresh Tokens)
+Validation
+class-validator
+Containerization
+Docker + Docker Compose
+Documentation
+Swagger (OpenAPI 3)
+AI Integration
+Gemini 1.5 Flash
