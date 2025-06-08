@@ -1,0 +1,35 @@
+services:
+  app:
+    image: myapp:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      - .env
+    volumes:
+      - ./node_modules:/usr/src/app/node_modules
+      - ./app:/usr/src/app
+    restart: always
+    networks:
+      - mynetwork
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=2832003
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
+volumes:
+  mongo-data:
