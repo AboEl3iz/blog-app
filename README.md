@@ -1,193 +1,173 @@
-📝 Blog App API
-This is a RESTful Blog API built using NestJS , designed for scalable, maintainable server-side applications. It supports authentication , post management , commenting , dashboard analytics , and even AI-assisted content generation via Gemini 1.5 Flash .
+# 📝 Blog App
 
-Fully documented via Swagger (OpenAPI 3.0) and supports MongoDB with Mongoose. 
+A full-featured blogging platform built with NestJS, MongoDB, and Generative AI (Gemini 1.5 Flash)!  
+This app lets users write, manage, and interact with blog posts and comments, featuring robust authentication, admin dashboard, and generative AI-powered content.
 
-🚀 Features
-🔐 Authentication : Signup, login, token refresh, and profile access
-📝 Post Management : Create, read, update, delete (CRUD), increment views/likes, search, filter by tag/slug
-💬 Comments : Add, retrieve, and delete comments on posts
-📊 Dashboard : View summarized data for admin or analytics
-🤖 AI-Generated Content : Generate blog ideas, posts, and replies using Gemini 1.5 Flash
-✅ DTO Validation : Type-safe and validated requests with class-validator
-📦 Docker Support : Easily containerized for deployment
-🔧 Swagger UI : Interactive API documentation at /api
-📂 Project Structure
+---
 
+## ✨ Features
 
-1
-2
-3
-4
-5
-6
-7
-src/
-├── auth/              # User auth, JWT, and roles
-├── post/              # Post entity and CRUD operations
-├── comment/           # Comment entity and routes
-├── dashboard/         # Admin summary endpoints
-├── generate-ai/       # AI content generation (Gemini 1.5 Flash)
-├── common/            # Shared modules, decorators, guards
-🛠️ Installation & Setup
-bash
+- **Authentication & Authorization**
+  - User registration, login, JWT authentication
+  - Role-based access (member/admin)
+  - Secure profile endpoint
 
+- **Blog Posts**
+  - Create, update, delete, and view posts
+  - Tags, cover images, drafts, likes, and views
+  - AI-generated content detection
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
-# Clone the repo
-git clone https://github.com/your-username/blog-api.git   
-cd blog-api
+- **Comments**
+  - Add, fetch, and delete comments
+  - Threaded replies and admin moderation
 
-# Install dependencies
-npm install
+- **Admin Dashboard**
+  - Dashboard summary for admins
 
-# Create a .env file
-cp .env.example .env
-⚙️ Environment Variables (.env)
-ini
+- **Generative AI Integration**
+  - Connects to **Google Gemini 1.5 Flash** via `@google/genai`
+  - Generate replies, post ideas, and full posts
+  - See `/generate-ai` endpoints
 
+- **Docker Support** 🐳
+  - Easily run the entire app in a Docker container
+  - Ready-to-use `Dockerfile` and example `docker-compose.yml` for local development
 
-1
-2
-3
-4
-MONGO_URI=mongodb://localhost:27017/blog-db
-JWT_SECRET=your_jwt_secret
-PORT=3000
-GEMINI_API_KEY=your_google_gemini_api_key
-🧪 Run the App
-bash
+---
 
+## 🐳 Docker Quick Start
 
-1
-2
-3
-4
-5
-# Development mode
-npm run start:dev
+1. **Build the image:**
+   ```sh
+   docker build -t blog-app .
+   ```
+2. **Run the container:**
+   ```sh
+   docker run -d -p 3000:3000 --env-file .env blog-app
+   ```
+3. **With MongoDB using Docker Compose:**
+   ```yaml
+   # docker-compose.yml example
+   version: '3.8'
+   services:
+     mongo:
+       image: mongo:7
+       restart: always
+       ports:
+         - 27017:27017
+       environment:
+         MONGO_INITDB_ROOT_USERNAME: root
+         MONGO_INITDB_ROOT_PASSWORD: example
+     blog-app:
+       build: .
+       ports:
+         - 3000:3000
+       depends_on:
+         - mongo
+       environment:
+         DATABASE_URL: mongodb://root:example@mongo:27017/blog-app?authSource=admin
+         JWT_SECRET: your_jwt_secret
+         OPENAI_API_KEY: your_gemini_api_key
+   ```
+   - Customize the environment variables as needed.
+   - Start everything:  
+     ```sh
+     docker-compose up --build
+     ```
 
-# Run with Docker
-docker-compose up
-📘 API Documentation
-Visit the interactive Swagger UI at:
+---
 
-🔗 http://localhost:3000/api
+## 🧩 Services Overview
 
-🔐 Authentication Endpoints
-POST
-/auth/signup
-Register a new user
-POST
-/auth/login
-Login and get tokens
-POST
-/auth/refresh
-Refresh access token
-GET
-/auth/profile
-Get current user profile
+```mermaid
+flowchart TD
+    A[User] -->|Auth| B(Auth Service)
+    A -->|Posts| C(Post Service)
+    A -->|Comments| D(Comment Service)
+    A -->|Dashboard| E(Dashboard Service)
+    A -->|AI Content| F(Generate AI Service)
+    F-->|Gemini 1.5 Flash|G[Google GenAI Cloud]
+```
 
-📝 Post Management Endpoints
-POST
-/post/create
-Create a new post
-GET
-/post/posts
-Retrieve all posts
-PUT
-/post/{id}
-Update a post by ID
-DELETE
-/post/{id}
-Delete a post by ID
-POST
-/post/increment-views/{id}
-Increment views of a post
-POST
-/post/increment-likes/{id}
-Increment likes of a post
-GET
-/post/with-slug
-Get post by slug
-GET
-/post/with-tag
-Get posts by tag
-GET
-/post/search
-Search posts
-GET
-/post/top-posts
-Get top posts
+---
 
-💬 Comment Endpoints
-POST
-/comment/add/{postId}
-Add a comment to a post
-GET
-/comment/all
-Retrieve all comments
-GET
-/comment/{postId}
-Get comments for a specific post
-DELETE
-/comment/{id}
-Delete a comment by ID
+## 🚦 API Endpoints
 
-📊 Dashboard Endpoints
-GET
-/dashboard/dashboard-summary
-Admin dashboard data
+| Service      | Method | Endpoint                           | Description                    | Auth       |
+|--------------|--------|------------------------------------|--------------------------------|------------|
+| Auth         | POST   | `/auth/signup`                     | Register user                  | ❌         |
+| Auth         | POST   | `/auth/login`                      | Login user                     | ❌         |
+| Auth         | POST   | `/auth/refresh`                    | Get new JWT                    | ❌         |
+| Auth         | GET    | `/auth/profile`                    | Get profile                    | ✔️         |
+| Post         | POST   | `/post/create`                     | Create new post                | ✔️ (Admin) |
+| Post         | GET    | `/post/posts`                      | List posts                     | ❌         |
+| Post         | POST   | `/post/increment-views/:id`        | Increment views                | ✔️         |
+| Post         | POST   | `/post/increment-likes/:id`        | Increment likes                | ✔️         |
+| Post         | PUT    | `/post/:id`                        | Update post                    | ✔️         |
+| Post         | DELETE | `/post/:id`                        | Delete post                    | ✔️         |
+| Post         | GET    | `/post/with-slug`                  | Get post by slug               | ❌         |
+| Post         | GET    | `/post/with-tag`                   | Get posts by tag               | ❌         |
+| Post         | GET    | `/post/search`                     | Search posts                   | ❌         |
+| Post         | GET    | `/post/top-posts`                  | Get top posts                  | ❌         |
+| Comment      | POST   | `/comment/add/:postid`             | Add comment                    | ✔️         |
+| Comment      | GET    | `/comment/all`                     | Get all comments (admin)       | ✔️ (Admin) |
+| Comment      | GET    | `/comment/:postid`                 | Get comments for post          | ❌         |
+| Comment      | DELETE | `/comment/:id`                     | Delete comment (admin)         | ✔️ (Admin) |
+| Dashboard    | GET    | `/dashboard/dashboard-summary`     | Admin dashboard                | ✔️ (Admin) |
+| Generate AI  | POST   | `/generate-ai/generate-reply`      | AI generate comment reply      | ❌         |
+| Generate AI  | POST   | `/generate-ai/generate-post-ideas` | AI generate blog post ideas    | ❌         |
+| Generate AI  | POST   | `/generate-ai/generate-post`       | AI generate blog post          | ❌         |
 
-🤖 AI Content Generation Endpoints (Gemini 1.5 Flash)
-POST
-/generate-ai/generate-reply
-Generate AI reply to a comment
-POST
-/generate-ai/generate-post-ideas
-Generate blog post ideas
-POST
-/generate-ai/generate-post
-Generate a full blog post
+> ⚠️ *This table may be incomplete. [View all controllers/services in codebase.](https://github.com/AboEl3iz/blog-app/search?q=%40Controller)*
 
-🧩 DTOs & Validation
-The app uses class-validator for strong input validation:
+---
 
-CreateAuthDto, LoginAuthDto, RefreshTokenDTO
-CreatePostDto, UpdatePostDto
-CreateCommentDto
-CreateGenerateAiReplyDto, CreateGenerateAiIdeasDto
-🖼️ Swagger UI Screenshots
-🔗 Full Swagger UI: http://localhost:3000/api
+## 🤖 Generative AI Integration
 
-🐳 Docker
-bash
+- **Model:** [Gemini 1.5 Flash](https://ai.google.dev/)
+- **Library:** `@google/genai`
+- **Endpoints:** `/generate-ai/generate-reply`, `/generate-ai/generate-post-ideas`, `/generate-ai/generate-post`
+- **How it works:**  
+  The app sends prompts to Gemini 1.5 Flash to generate replies, post ideas, or articles.
+- **API Key:** Configured via `OPENAI_API_KEY` in environment
 
+---
 
-1
-2
-# Build and run with Docker
-docker-compose up --build
-📌 Tech Stack
-Framework
-NestJS
-Database
-MongoDB + Mongoose
-Authentication
-JWT (Access + Refresh Tokens)
-Validation
-class-validator
-Containerization
-Docker + Docker Compose
-Documentation
-Swagger (OpenAPI 3)
-AI Integration
-Gemini 1.5 Flash
+## 🧑‍💻 Example User Schema
+
+```mermaid
+classDiagram
+    class Auth {
+      +String name
+      +String email
+      +String password
+      +String role
+      +Date createdAt
+      +Date updatedAt
+      +String bio
+      +String profilePicture
+    }
+```
+
+---
+
+## 🏁 Getting Started (Non-Docker)
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set environment variables:
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `OPENAI_API_KEY` (for Gemini 1.5 Flash)
+4. Run the app: `npm run start:dev`
+
+---
+
+## 🌐 More Info
+
+- Contributions welcome!
+- [View code and all endpoints here](https://github.com/AboEl3iz/blog-app/search?q=%40Controller)
+
+---
+
+> _This README was generated with ❤️ and shows a partial list of endpoints. For the full list, explore the codebase!_
